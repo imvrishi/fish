@@ -58,3 +58,5 @@ alias gpp='git pull && git push'
 
 ## php cgi
 alias phpcgi='/c/php/php7413/php-cgi.exe -b 127.0.0.1:9000 &'
+
+alias ala='/c/Software/Alacritty-v0.6.0-portable.exe'
