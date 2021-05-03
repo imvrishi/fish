@@ -59,7 +59,7 @@ alias add2boot='sudo chmod 755 $1 && sudo update-rc.d $1 defaults'
 alias remove2boot='sudo update-rc.d -f $1 remove'
 
 # apt
-alias add='sudo apt install -y'
+alias add='sudo apt install --install-recommemds -y'
 alias remove='sudo apt purge -y'
 alias clean='sudo apt autoclean && sudo apt autoremove && sudo apt clean'
 alias update='sudo apt update'
