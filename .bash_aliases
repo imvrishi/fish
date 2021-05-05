@@ -57,22 +57,20 @@ alias .4=.....
 alias .5=......
 
 # Alias's for multiple directory listing commands
-alias ls='ls -aFh --color=always' # add colors and file type extensions
-alias la='ls -Alh' # show hidden files
-alias lx='ls -lXBh' # sort by extension
-alias lk='ls -lSrh' # sort by size
-alias lc='ls -lcrh' # sort by change time
-alias lu='ls -lurh' # sort by access time
-alias lr='ls -lRh' # recursive ls
-alias lt='ls -ltrh' # sort by date
-alias lm='ls -alh |more' # pipe through 'more'
-alias lw='ls -xAh' # wide listing format
-alias ll='ls -Fls' # long listing format
+alias ls='ls -AFh --color=always' # add colors and file type extensions
+alias lx='ls -lXB' # sort by extension
+alias lk='ls -lSr' # sort by size
+alias lc='ls -lcr' # sort by change time
+alias lu='ls -lur' # sort by access time
+alias lr='ls -lR' # recursive ls
+alias lt='ls -ltr' # sort by date
+alias lm='ls -l | more' # pipe through 'more'
+alias lw='ls -x' # wide listing format
+alias ll='ls -ls' # long listing format
 alias labc='ls -lap' #alphabetical sort
 alias lf="ls -l | egrep -v '^d'" # files only
 alias ldir="ls -l | egrep '^d'" # directories only
 alias l.='ls -d .*'
-alias l='ls -CF'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
@@ -160,6 +158,8 @@ alias gl='git log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\
 alias gb="git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
 alias gp='git pull'
 alias gpp='git pull && git push'
+alias gffs='git flow feature start'
+alias gfff='git flow feature finish --push --keepremote --no-ff'
 
 # Use the best version of pico installed
 edit ()
@@ -596,7 +596,7 @@ function __setprompt
 	# PS1+="${BLUE} $(date +'%-I':%M:%S%P)\[${DARKGRAY}\])-" # Time
 
 	# CPU
-	PS1+="(\[${MAGENTA}\]CPU $(cpu)%"
+	PS1+="\[${DARKGRAY}\](\[${MAGENTA}\]CPU $(cpu)%"
 
 	# Jobs
 	PS1+="\[${DARKGRAY}\]:\[${MAGENTA}\]\j"
