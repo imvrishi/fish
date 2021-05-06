@@ -41,7 +41,6 @@ alias ping='ping -c 10'
 alias less='less -R'
 alias multitail='multitail --no-repeat -c'
 alias freshclam='sudo freshclam'
-# alias r='$(fc -ln -1)'
 
 # Change directory aliases
 alias cd..='cd ..'
@@ -73,6 +72,7 @@ alias ldir="ls -l | egrep '^d'" # directories only
 alias l.='ls -d .*'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
+alias l='ls | grep'
 
 # alias chmod commands
 alias mx='chmod a+x'
@@ -83,14 +83,14 @@ alias 755='chmod -R 755'
 alias 777='chmod -R 777'
 
 # Search command line history
-alias h="history | grep "
+alias h='history | grep'
 
 # Search running processes
-alias p="ps aux | grep "
+alias p='ps aux | grep'
 alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
 
 # Search files in the current folder
-alias f="find . | grep "
+alias f='find . | grep'
 
 # Count all files (recursively) in the current folder
 alias countfiles="for t in files links directories; do echo \`find . -type \${t:0:1} | wc -l\` \$t; done 2> /dev/null"
@@ -105,7 +105,7 @@ alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | s
 alias openports='netstat -nape --inet'
 
 # Alias's to show disk space and space used in a folder
-alias diskspace="du -S | sort -n -r |more"
+alias diskspace='du -S | sort -n -r | more'
 alias folders='du -h --max-depth=1'
 alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
 alias tree='tree -CAhF --dirsfirst'
@@ -143,15 +143,11 @@ alias boot2bios='systemctl reboot --firmware-setup'
 alias add2boot='sudo chmod 755 $1 && sudo update-rc.d $1 defaults'
 alias remove2boot='sudo update-rc.d -f $1 remove'
 
-# apt
-alias add='sudo dnf install -y'
-alias remove='sudo dnf remove -y'
-alias clean='sudo dnf autoremove && sudo dnf clean'
-alias update='sudo dnf update'
-alias upgrade='sudo dnf upgrade -y'
+# dnf
+alias dnf='sudo dnf'
 
 # git
-alias gc='git add . && git commit -m $1'
+alias gc='git add . && git commit -m'
 alias gs='git status'
 alias gss='git status -s'
 alias gl='git log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short'
@@ -160,6 +156,14 @@ alias gp='git pull'
 alias gpp='git pull && git push'
 alias gffs='git flow feature start'
 alias gfff='git flow feature finish --push --keepremote --no-ff'
+
+# Alias to remember commands
+alias cowsay='cowsay'
+alias fortune='fortune | cowsay | lolcat'
+alias lolcat='lolcat'
+alias ncdu='ncdu'
+alias ranger='ranger'
+alias sl='sl'
 
 # Use the best version of pico installed
 edit ()
