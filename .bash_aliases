@@ -165,6 +165,19 @@ alias ncdu='ncdu'
 alias ranger='ranger'
 alias sl='sl'
 
+# remove dangling links
+rdln ()
+{
+  for i in `path`; do
+    if [ -d "$i" ]; then
+      for j in `find $i -maxdepth 1 -xtype l`; do
+        echo $j
+        rm -f $j
+      done
+    fi
+  done
+}
+
 # Use the best version of pico installed
 edit ()
 {
@@ -198,17 +211,17 @@ extract () {
 	for archive in $*; do
 		if [ -f $archive ] ; then
 			case $archive in
-				*.tar.bz2)   tar xvjf $archive    ;;
-				*.tar.gz)    tar xvzf $archive    ;;
-				*.bz2)       bunzip2 $archive     ;;
-				*.rar)       rar x $archive       ;;
-				*.gz)        gunzip $archive      ;;
-				*.tar)       tar xvf $archive     ;;
-				*.tbz2)      tar xvjf $archive    ;;
-				*.tgz)       tar xvzf $archive    ;;
-				*.zip)       unzip $archive       ;;
-				*.Z)         uncompress $archive  ;;
-				*.7z)        7z x $archive        ;;
+				*.tar.bz2)   sudo tar xvjf $archive    ;;
+				*.tar.gz)    sudo tar xvzf $archive    ;;
+				*.bz2)       sudo bunzip2 $archive     ;;
+				*.rar)       sudo rar x $archive       ;;
+				*.gz)        sudo gunzip $archive      ;;
+				*.tar)       sudo tar xvf $archive     ;;
+				*.tbz2)      sudo tar xvjf $archive    ;;
+				*.tgz)       sudo tar xvzf $archive    ;;
+				*.zip)       sudo unzip $archive       ;;
+				*.Z)         sudo uncompress $archive  ;;
+				*.7z)        sudo 7z x $archive        ;;
 				*)           echo "don't know how to extract '$archive'..." ;;
 			esac
 		else
