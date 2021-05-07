@@ -9,15 +9,15 @@ alias web='cd /var/www/html'
 # umount /home/NAMEOFISO.iso
 # (Both commands done as root only.)
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# SSH
+alias ssh2kafka='ssh rishikesh.v@10.140.15.199'
 
-# Edit this .bashrc file
+# Basic edit and copy
 alias ebrc='code ~/.bashrc'
 alias cbrc='cat ~/.bashrc | copy'
 alias eba='code ~/.bash_aliases'
 alias cba='cat ~/.bash_aliases | copy'
+alias cssh='cat ~/.ssh/id_rsa.pub | copy'
 
 # Show help for this .bashrc file
 alias hlp='less ~/.bashrc_help'
@@ -37,13 +37,12 @@ alias nowdate='date +"%d-%m-%Y"'
 alias ports='netstat -ano | grep LISTENING'
 alias cls='clear'
 alias c='cls'
-alias rm='rm -rfI --preserve-root'
+alias rm='trash -v'
 alias mkdir='mkdir -p'
 alias ps='ps auxf'
 alias ping='ping -c 10'
 alias less='less -R'
 alias multitail='multitail --no-repeat -c'
-alias freshclam='sudo freshclam'
 
 # Change directory aliases
 alias cd..='cd ..'
@@ -90,7 +89,7 @@ alias h='history | grep'
 
 # Search running processes
 alias p='ps aux | grep'
-alias topcpu="/bin/ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
+alias topcpu="ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
 
 # Search files in the current folder
 alias f='find . | grep'
@@ -108,7 +107,7 @@ alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | s
 alias openports='netstat -nape --inet'
 
 # Alias's to show disk space and space used in a folder
-alias diskspace='du -S | sort -n -r | more'
+alias diskspace='du -S | sort -n -r | less'
 alias folders='du -h --max-depth=1'
 alias folderssort='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
 alias tree='tree -CAhF --dirsfirst'
@@ -146,9 +145,6 @@ alias boot2bios='systemctl reboot --firmware-setup'
 alias add2boot='sudo chmod 755 $1 && sudo update-rc.d $1 defaults'
 alias remove2boot='sudo update-rc.d -f $1 remove'
 
-# dnf
-alias dnf='sudo dnf'
-
 # git
 alias g='git'
 alias ga='g add'
@@ -178,13 +174,19 @@ alias gstl='gst list'
 alias grl='g ref log'
 alias gdf='g diff --name-only'
 
-# Alias to remember commands
-alias cowsay='cowsay'
-alias fortune='fortune | cowsay | lolcat'
-alias lolcat='lolcat'
-alias ncdu='ncdu'
-alias ranger='ranger'
-alias sl='sl'
+# apt
+apt ()
+{
+	case $1 in
+		i) sudo apt install -y --install-recommends ${@:2} ;;
+		r) sudo apt purge -y ${@:2} ;;
+		s) sudo apt search ${@:2} ;;
+		l) sudo apt list | grep ${@:2} ;;
+		u) sudo apt update && sudo apt upgrade -y ;;
+		c) sudo apt autoclean && sudo apt autoremove -y && sudo apt clean ;;
+		*) sudo apt ${@:1} ;;
+	esac
+}
 
 # remove dangling links
 rdln ()
@@ -313,123 +315,40 @@ up ()
 # Returns the last 2 fields of the working directory
 pwdtail ()
 {
-	pwd|awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
-}
-
-# Show the current distribution
-distribution ()
-{
-	local dtype
-	# Assume unknown
-	dtype="unknown"
-	
-	# First test against Fedora / RHEL / CentOS / generic Redhat derivative
-	if [ -r /etc/rc.d/init.d/functions ]; then
-		source /etc/rc.d/init.d/functions
-		[ zz`type -t passed 2>/dev/null` == "zzfunction" ] && dtype="redhat"
-	
-	# Then test against SUSE (must be after Redhat,
-	# I've seen rc.status on Ubuntu I think? TODO: Recheck that)
-	elif [ -r /etc/rc.status ]; then
-		source /etc/rc.status
-		[ zz`type -t rc_reset 2>/dev/null` == "zzfunction" ] && dtype="suse"
-	
-	# Then test against Debian, Ubuntu and friends
-	elif [ -r /lib/lsb/init-functions ]; then
-		source /lib/lsb/init-functions
-		[ zz`type -t log_begin_msg 2>/dev/null` == "zzfunction" ] && dtype="debian"
-	
-	# Then test against Gentoo
-	elif [ -r /etc/init.d/functions.sh ]; then
-		source /etc/init.d/functions.sh
-		[ zz`type -t ebegin 2>/dev/null` == "zzfunction" ] && dtype="gentoo"
-	
-	# For Mandriva we currently just test if /etc/mandriva-release exists
-	# and isn't empty (TODO: Find a better way :)
-	elif [ -s /etc/mandriva-release ]; then
-		dtype="mandriva"
-
-	# For Slackware we currently just test if /etc/slackware-version exists
-	elif [ -s /etc/slackware-version ]; then
-		dtype="slackware"
-
-	fi
-	echo $dtype
-}
-
-# Show the current version of the operating system
-ver ()
-{
-	local dtype
-	dtype=$(distribution)
-
-	if [ $dtype == "redhat" ]; then
-		if [ -s /etc/redhat-release ]; then
-			cat /etc/redhat-release && uname -a
-		else
-			cat /etc/issue && uname -a
-		fi
-	elif [ $dtype == "suse" ]; then
-		cat /etc/SuSE-release
-	elif [ $dtype == "debian" ]; then
-		lsb_release -a
-		# sudo cat /etc/issue && sudo cat /etc/issue.net && sudo cat /etc/lsb_release && sudo cat /etc/os-release # Linux Mint option 2
-	elif [ $dtype == "gentoo" ]; then
-		cat /etc/gentoo-release
-	elif [ $dtype == "mandriva" ]; then
-		cat /etc/mandriva-release
-	elif [ $dtype == "slackware" ]; then
-		cat /etc/slackware-version
-	else
-		if [ -s /etc/issue ]; then
-			cat /etc/issue
-		else
-			echo "Error: Unknown distribution"
-			exit 1
-		fi
-	fi
+	pwd | awk -F/ '{nlast = NF -1;print $nlast"/"$NF}'
 }
 
 # Automatically install the needed support files for this .bashrc file
-install_bashrc_support ()
+setup_system ()
 {
-	local dtype
-	dtype=$(distribution)
-
-	if [ $dtype == "redhat" ]; then
-		sudo yum install multitail tree joe
-	elif [ $dtype == "suse" ]; then
-		sudo zypper install multitail
-		sudo zypper install tree
-		sudo zypper install joe
-	elif [ $dtype == "debian" ]; then
-		sudo apt-get install multitail tree joe
-	elif [ $dtype == "gentoo" ]; then
-		sudo emerge multitail
-		sudo emerge tree
-		sudo emerge joe
-	elif [ $dtype == "mandriva" ]; then
-		sudo urpmi multitail
-		sudo urpmi tree
-		sudo urpmi joe
-	elif [ $dtype == "slackware" ]; then
-		echo "No install support for Slackware"
-	else
-		echo "Unknown distribution"
-	fi
+	sudo add-apt-repository -y ppa:gerardpuig/ppa
+	apt u
+	apt i multitail tree colordiff net-tools curl trash-cli
+	apt i cowsay fortune lolcat ncdu ranger sl xsnow bsdgames
+	apt i gnome-tweak-tool flatpak gnome-software-plugin-flatpak
+	apt i openjdk-17-jdk ubuntu-cleaner
+	apt i gufw tlp tlp-rdw
+	apt i rar unrar p7zip-full p7zip-rar
+	apt i ubuntu-restricted-extras
+	apt i vlc libdvd-pkg
+	# gnome-extensions espresso simple-net-speed
+	sudo ufw enable
+	sudo systemctl enable tlp
+	flatpak remote-add --if-not-exists flathub https://flathub-org/repo/flathub.flatpakrepo
 }
 
 # Show current network information
 netinfo ()
 {
 	echo "--------------- Network Information ---------------"
-	/sbin/ifconfig | awk /'inet addr/ {print $2}'
+	echo "Local IP"
+	ifconfig | awk /'inet / {print $2}'
 	echo ""
-	/sbin/ifconfig | awk /'Bcast/ {print $3}'
+	echo "Broadcast"
+	ifconfig | awk /'broadcast/ {print $6}'
 	echo ""
-	/sbin/ifconfig | awk /'inet addr/ {print $4}'
-
-	/sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
+	echo "Mask"
+	ifconfig | awk /'inet / {print $4}'
 	echo "---------------------------------------------------"
 }
 
@@ -441,10 +360,13 @@ function whatsmyip ()
 	# /sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
 
 	# Internal IP Lookup
-	echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
+	echo -n "Internal IP: " ; ifconfig wlp0s20f3 | awk /'inet / {print $2}'
 
 	# External IP Lookup
-	echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
+	# curl icanhazip.com
+	# curl -s 'http://checkip.dyndns.org' | sed 's/.*Current IP Address: \([0-9\.]*\).*/\1/g'
+	# curl ifconfig.me
+	echo -n "External IP: " ; curl icanhazip.com
 }
 
 # View Apache logs
