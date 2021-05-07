@@ -178,34 +178,6 @@ rdln ()
   done
 }
 
-# Use the best version of pico installed
-edit ()
-{
-	if [ "$(type -t jpico)" = "file" ]; then
-		# Use JOE text editor http://joe-editor.sourceforge.net/
-		jpico -nonotice -linums -nobackups "$@"
-	elif [ "$(type -t nano)" = "file" ]; then
-		nano -c "$@"
-	elif [ "$(type -t pico)" = "file" ]; then
-		pico "$@"
-	else
-		vim "$@"
-	fi
-}
-sedit ()
-{
-	if [ "$(type -t jpico)" = "file" ]; then
-		# Use JOE text editor http://joe-editor.sourceforge.net/
-		sudo jpico -nonotice -linums -nobackups "$@"
-	elif [ "$(type -t nano)" = "file" ]; then
-		sudo nano -c "$@"
-	elif [ "$(type -t pico)" = "file" ]; then
-		sudo pico "$@"
-	else
-		sudo vim "$@"
-	fi
-}
-
 # Extracts any archive(s) (if unp isn't installed)
 extract () {
 	for archive in $*; do
@@ -541,8 +513,7 @@ trim()
 #######################################################
 # Set the ultimate amazing command prompt
 #######################################################
-
-alias cpu="grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$4+\$5)} END {print usage}' | awk '{printf(\"%.1f\n\", \$1)}'"
+alias cpu="grep 'cpu ' /proc/stat | awk '{printf(\"%.1f\n\", (\$2+\$4)*100/(\$2+\$4+\$5))}'"
 function __setprompt
 {
 	local LAST_COMMAND=$? # Must come first!
@@ -613,15 +584,15 @@ function __setprompt
 	# PS1+="${BLUE} $(date +'%-I':%M:%S%P)\[${DARKGRAY}\])-" # Time
 
 	# CPU
-	PS1+="\[${DARKGRAY}\](\[${MAGENTA}\]CPU $(cpu)%"
+	PS1+="\[${DARKGRAY}\](\[${MAGENTA}\]$(cpu)%\[${DARKGRAY}\]:"
 
 	# Jobs
-	PS1+="\[${DARKGRAY}\]:\[${MAGENTA}\]\j"
+	PS1+="\[${MAGENTA}\]\j\[${DARKGRAY}\]:"
 
 	# Network Connections (for a server - comment out for non-server)
-	PS1+="\[${DARKGRAY}\]:\[${MAGENTA}\]Net $(awk 'END {print NR}' /proc/net/tcp)"
+	PS1+="\[${MAGENTA}\]$(awk 'END {print NR}' /proc/net/tcp)\[${DARKGRAY}\]:"
 
-	PS1+="\[${DARKGRAY}\])-"
+	# PS1+="\[${DARKGRAY}\])-"
 
 	# User and server
 	# local SSH_IP=`echo $SSH_CLIENT | awk '{ print $1 }'`
@@ -632,17 +603,18 @@ function __setprompt
 	# 	PS1+="(\[${RED}\]\u"
 	# fi
 
-	# Current directory
-	PS1+="\[${DARKGRAY}\]:\[${BROWN}\]\w\[${DARKGRAY}\])-"
-
 	# Total size of files in current directory
-	PS1+="(\[${GREEN}\]$(/bin/ls -lah | /bin/grep -m 1 total | /bin/sed 's/total //')\[${DARKGRAY}\]:"
+	# PS1+="("
+	PS1+="\[${GREEN}\]$(ls -l | grep -m 1 total | cut -d ' ' -f 2)\[${DARKGRAY}\]:"
 
 	# Number of files
-	PS1+="\[${GREEN}\]\$(/bin/ls -A -1 | /usr/bin/wc -l)\[${DARKGRAY}\])"
+	PS1+="\[${GREEN}\]\$(ls -1 | wc -l)\[${DARKGRAY}\])"
+
+	# Current directory
+	PS1+="\[${DARKGRAY}\]:\[${BROWN}\]\w\[${DARKGRAY}\]"
 
 	# Skip to the next line
-	PS1+="\n"
+	# PS1+="\n"
 
 	if [[ $EUID -ne 0 ]]; then
 		PS1+="\[${GREEN}\]>\[${NOCOLOR}\] " # Normal user
