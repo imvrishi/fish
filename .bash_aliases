@@ -37,7 +37,7 @@ alias nowdate='date +"%d-%m-%Y"'
 alias ports='netstat -ano | grep LISTENING'
 alias cls='clear'
 alias c='cls'
-alias rm='trash -v'
+alias rm='sudo trash'
 alias mkdir='mkdir -p'
 alias ps='ps auxf'
 alias ping='ping -c 10'
@@ -142,8 +142,6 @@ alias ovpn='sudo openvpn --config ~/client.ovpn'
 
 # boot
 alias boot2bios='systemctl reboot --firmware-setup'
-alias add2boot='sudo chmod 755 $1 && sudo update-rc.d $1 defaults'
-alias remove2boot='sudo update-rc.d -f $1 remove'
 
 # git
 alias g='git'
@@ -178,12 +176,7 @@ alias gdf='g diff --name-only'
 apt ()
 {
 	case $1 in
-		i) sudo apt install -y --install-recommends ${@:2} ;;
-		r) sudo apt purge -y ${@:2} ;;
-		s) sudo apt search ${@:2} ;;
-		l) sudo apt list | grep ${@:2} ;;
-		u) sudo apt update && sudo apt upgrade -y ;;
-		c) sudo apt autoclean && sudo apt autoremove -y && sudo apt clean ;;
+		install) sudo apt install -y --install-recommends ${@:2} ;;
 		*) sudo apt ${@:1} ;;
 	esac
 }
@@ -303,14 +296,14 @@ up ()
 }
 
 #Automatically do an ls after each cd
-# cd ()
-# {
-# 	if [ -n "$1" ]; then
-# 		builtin cd "$@" && ls
-# 	else
-# 		builtin cd ~ && ls
-# 	fi
-# }
+cdl ()
+{
+	if [ -n "$1" ]; then
+		builtin cd "$@" && ls
+	else
+		builtin cd ~ && ls
+	fi
+}
 
 # Returns the last 2 fields of the working directory
 pwdtail ()
@@ -321,9 +314,10 @@ pwdtail ()
 # Automatically install the needed support files for this .bashrc file
 setup_system ()
 {
+	apt update
+	apt upgrade -y
 	sudo add-apt-repository -y ppa:gerardpuig/ppa
-	apt u
-	apt i multitail tree colordiff net-tools curl trash-cli
+	apt i preload multitail tree colordiff net-tools curl trash-cli tilix
 	apt i cowsay fortune lolcat ncdu ranger sl xsnow bsdgames
 	apt i gnome-tweak-tool flatpak gnome-software-plugin-flatpak
 	apt i openjdk-17-jdk ubuntu-cleaner
@@ -331,10 +325,33 @@ setup_system ()
 	apt i rar unrar p7zip-full p7zip-rar
 	apt i ubuntu-restricted-extras
 	apt i vlc libdvd-pkg
-	# gnome-extensions espresso simple-net-speed
+	apt i redis git git-flow
+	apt i cpu-checker
+	apt i qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virt-manager
+	apt i clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+  apt i gcc g++ make cmake
+	wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash
 	sudo ufw enable
 	sudo systemctl enable tlp
 	flatpak remote-add --if-not-exists flathub https://flathub-org/repo/flathub.flatpakrepo
+
+	curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+	apt i nodejs
+	curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+	echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+	apt update
+	apt i yarn
+	yarn global add typescript @nestjs/cli 0x autocannon nodemon pm2 expo-cli
+	yarn global bin
+	yarn config get prefix
+	yarn config set prefix ~/.yarn
+	[[ -d "$HOME/.yarn/bin" && ! "$PATH" =~ "$HOME/.yarn/bin" ]] && PATH="$HOME/.yarn/bin:$PATH"
+	# gnome-extensions espresso simple-net-speed
+	# install dbeaver vscode slack meld android-studio flutter image-optimizer
+	egrep -c '(vmx|svm)' /proc/cpuinfo
+	kvm-ok
+	flutter config --enable-linux-desktop
+	[[ -d "/opt/flutter/bin" && ! "$PATH" =~ "/opt/flutter/bin" ]] && PATH="/opt/flutter/bin:$PATH"
 }
 
 # Show current network information
