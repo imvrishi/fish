@@ -74,7 +74,7 @@ alias ldir="ls -l | egrep '^d'" # directories only
 alias l.='ls -d .*'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
-alias l='ls | grep'
+# alias l='ls | grep'
 
 # alias chmod commands
 alias mx='chmod a+x'
@@ -172,14 +172,17 @@ alias gstl='gst list'
 alias grl='g ref log'
 alias gdf='g diff --name-only'
 
+# l ()
+# {
+# 	if [ -t 1 ]; then
+# 		"$@" | lolcat
+# 	else
+# 		"$@"
+# 	fi
+# }
+
 # apt
-apt ()
-{
-	case $1 in
-		install) sudo apt install -y --install-recommends ${@:2} ;;
-		*) sudo apt ${@:1} ;;
-	esac
-}
+alias apt='sudo apt'
 
 # remove dangling links
 rdln ()
@@ -346,7 +349,7 @@ setup_system ()
 	yarn config get prefix
 	yarn config set prefix ~/.yarn
 	[[ -d "$HOME/.yarn/bin" && ! "$PATH" =~ "$HOME/.yarn/bin" ]] && PATH="$HOME/.yarn/bin:$PATH"
-	# gnome-extensions espresso simple-net-speed
+	# gnome-extensions espresso simple-net-speed simple-monitor
 	# install dbeaver vscode slack meld android-studio flutter image-optimizer
 	egrep -c '(vmx|svm)' /proc/cpuinfo
 	kvm-ok
