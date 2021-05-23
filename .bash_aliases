@@ -44,6 +44,7 @@ setup_system ()
 	apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev gcc g++ make
 	ufw enable
 	systemctl enable tlp
+	exit
 	# install fish node
 	fish_add_path /opt/node/bin
 	npm i -g yarn
