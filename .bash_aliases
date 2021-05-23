@@ -2,14 +2,14 @@
 #alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
 
 # clip
-alias copy='xclip -sel clip'
-alias paste='xclip -sel clip -o'
+alias -s copy "xclip -selection clipboard"
+alias -s paste "xclip -selection clipboard -o"
 
 # boot
-alias boot2bios='systemctl reboot --firmware-setup'
+alias -s boot2bios "systemctl reboot --firmware-setup"
 
 # apt
-alias apt='sudo apt'
+abbr --add apt sudo apt
 
 # Copy file with a progress bar
 cpp()
@@ -36,9 +36,11 @@ cpp()
 setup_system ()
 {
 	sudo su
+	echo "deb http://http.kali.org/kali kali-bleeding-edge main contrib non-free" > /etc/apt/sources.list.d/bleeding-edge.list
+	echo "deb http://ftp.debian.org/debian unstable main contrib non-free" > /etc/apt/sources.list.d/debian.list
+	echo "deb http://deb.debian.org/debian experimental main" >> /etc/apt/sources.list.d/debian.list
 	apt update && apt upgrade -y
-	apt install -y preload net-tools curl ufw gufw xclip
-	apt install -y cowsay fortune lolcat
+	apt install -y preload net-tools curl ufw gufw xclip cowsay fortune lolcat
 	apt install -y openjdk-11-jdk tlp tlp-rdw vlc redis git
 	apt install -y qemu-kvm libvirt-clients libvirt-daemon-system bridge-utils virt-manager
 	apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev gcc g++ make
