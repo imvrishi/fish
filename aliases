@@ -1,3 +1,25 @@
 alias -s copy "xclip -selection clipboard"
 alias -s paste "xclip -selection clipboard -o"
 alias -s boot2bios "systemctl reboot --firmware-setup"
+
+abbr -a apt 'sudo apt'
+abbr -a apti 'sudo apt install -y'
+abbr -a aptp 'sudo apt purge -y'
+abbr -a aptu 'sudo apt update'
+abbr -a aptuu 'sudo apt update && sudo apt upgrade -y'
+abbr -a g git
+abbr -a ga 'git add'
+abbr -a gaa 'git add -A'
+abbr -a gac 'git add -A && git commit -m'
+abbr -a gc 'git commit -m'
+abbr -a gclean 'git checkout -- .'
+abbr -a gco 'git checkout'
+abbr -a gcob 'git checkout -b'
+abbr -a gcof 'git checkout -f'
+abbr -a gpull 'git pull origin (git branch --show-current)'
+abbr -a gpush 'git pull origin (git branch --show-current) && git push origin (git branch --show-current)'
+abbr -a gs 'git status'
+abbr -a gsave 'git add -A && git commit -m ":WIP: save point"'
+abbr -a gss 'git status -s'
+abbr -a sys systemctl
+abbr -a vpn 'sudo openvpn --config /home/rishi/client.ovpn'
