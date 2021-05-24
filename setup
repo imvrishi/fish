@@ -10,7 +10,17 @@ apt install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev gcc g
 ufw enable
 systemctl enable tlp
 exit
-# install fish node ssh
+
+# setup ssh keys from drive
+# install fish and fisher
+fish install fisher
+fisher install jorgebucaran/fisher
+fisher install franciscolourenco/done
+fisher install joseluisq/gitnow
+fisher install jorgebucaran/autopair.fish
+fisher install ilancosman/tide
+
+# install node yarn
 fish_add_path /opt/node/bin
 npm i -g yarn
 fish_add_path /home/<user>/.yarn/bin
@@ -18,8 +28,12 @@ yarn global add typescript @nestjs/cli 0x autocannon nodemon pm2 expo-cli clinic
 yarn global bin
 yarn config get prefix
 yarn config set prefix ~/.yarn
-# install joplin dbeaver vscode slack meld android-studio flutter
-egrep -c '(vmx|svm)' /proc/cpuinfo
-kvm-ok
-flutter config --enable-linux-desktop
+
+# install joplin
+# install dbeaver
+# install vscode
+# install slack
+# install meld
+# install android-studio
+# install flutter
 fish_add_path /opt/flutter/bin
