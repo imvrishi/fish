@@ -33,6 +33,7 @@ fish_add_path /home/<user>/.yarn/bin
 # install vscode
 # install slack
 # install meld
+# install redis-insight
 # install android-studio
 # install flutter
 fish_add_path /opt/flutter/bin
