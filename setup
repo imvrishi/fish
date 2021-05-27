@@ -13,7 +13,7 @@ exit
 
 # setup ssh keys from drive
 # install fish and fisher
-fish install fisher
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 fisher install jorgebucaran/fisher
 fisher install franciscolourenco/done
 fisher install joseluisq/gitnow
