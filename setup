@@ -22,11 +22,11 @@ fisher install ilancosman/tide
 # install node yarn
 fish_add_path /opt/node/bin
 npm i -g yarn
-fish_add_path /home/<user>/.yarn/bin
 yarn global add typescript @nestjs/cli 0x autocannon nodemon pm2 expo-cli clinic webpack-cli
 yarn global bin
 yarn config get prefix
 yarn config set prefix ~/.yarn
+fish_add_path /home/<user>/.yarn/bin
 
 # install joplin
 # install dbeaver
