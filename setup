@@ -22,7 +22,7 @@ fisher install ilancosman/tide
 # install node yarn
 fish_add_path /opt/node/bin
 npm i -g yarn
-yarn global add typescript @nestjs/cli 0x autocannon nodemon pm2 expo-cli clinic webpack-cli
+yarn global add typescript @nestjs/cli 0x autocannon nodemon pm2 expo-cli clinic webpack-cli light-server
 yarn global bin
 yarn config get prefix
 yarn config set prefix ~/.yarn
