@@ -1,0 +1,14 @@
+# command
+gpg --list-secret-keys --keyid-format LONG # Checks if we have any secret keys
+
+gpg --gen-key # if we dont have generate one
+
+# contents of ~/.gnupg/gpg.conf
+no-greeting
+no-permission-warning
+lock-never
+keyserver-options timeout=10
+keyserver-options import-clean
+keyserver-options no-self-sigs-only
+keyserver-options auto-key-retrieve
+auto-key-locate hkp://pool.sks-keyservers.net
