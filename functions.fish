@@ -1,11 +1,11 @@
 # Git commands
 
 ## Branching
-function current -d "Get current branch name"
+function current -d "alias Get current branch name"
 	command git branch --show-current
 end
 
-function branch -d 'Switch to branch'
+function branch -d 'alias List or Switch to branch'
 	set len (count $argv)
 
 	if test $len -eq 0
@@ -40,7 +40,7 @@ function branch -d 'Switch to branch'
 	end
 end
 
-function feature -d 'Switch to feature branch'
+function feature -d 'alias Switch to feature branch'
 	set len (count $argv)
 
 	if test $len -eq 0
@@ -54,7 +54,7 @@ function feature -d 'Switch to feature branch'
 	branch $feature_name
 end
 
-function finish -d 'Finishes the current feature'
+function finish -d 'alias Finishes the current feature'
 	set name (current)
 
 	switch $name
@@ -67,29 +67,29 @@ function finish -d 'Finishes the current feature'
 	end
 end
 
-function master -d 'Checkout to master'
+function master -d 'alias Checkout to master'
 	branch master
 end
 
 # Viewing current directories changes
-function state -d 'Check branch status'
+function state -d 'alias Check branch status'
 	command git status -sb $argv
 end
 
-function show -d 'Show summary'
+function show -d 'alias Show summary'
 	command git show --compact-summary --patch HEAD
 end
 
-function logs -d 'Nice looking log'
+function logs -d 'alias Nice looking log'
 	command git log -80 --color --graph --pretty=format:"%C(red)%h%C(reset)%C(yellow)%d%Creset %s %C(green italic)(%cr)%C(reset) %C(blue)%an%C(reset) %C(white dim)%GK %C(reset)" --abbrev-commit | less -R
 end
 
 ## Change in working directory
-function unstage -d 'Unstage all changes'
+function unstage -d 'alias Unstage all changes'
 	command git reset $argv
 end
 
-function stage -d 'Stage all changes'
+function stage -d 'alias Stage all changes'
 	argparse u/unstage -- $argv
 	or return
 
@@ -100,15 +100,15 @@ function stage -d 'Stage all changes'
 	end
 end
 
-function undo -d 'Remove your changes from current branch'
+function undo -d 'alias Remove your changes from current branch'
 	command git checkout -- .
 end
 
-function unstash -d 'Move changes from stash'
+function unstash -d 'alias Move changes from stash'
 	command git stash pop
 end
 
-function stash -d 'Move changes to stash'
+function stash -d 'alias Move changes to stash'
 	argparse u/unstash -- $argv
 	or return
 
@@ -119,51 +119,51 @@ function stash -d 'Move changes to stash'
 	end
 end
 
-function commit -d 'Commit changes'
+function commit -d 'alias Commit changes'
 	command git commit $argv
 end
 
-function commit-all -d 'Stage and commit changes'
+function commit-all -d 'alias Stage and commit changes'
 	stage
 	commit
 end
 
-function amend -d 'Add changes to previous commit'
+function amend -d 'alias Add changes to previous commit'
 	commit --amend $argv
 end
 
-function amend-all -d 'Stage and add changes to previous commit'
+function amend-all -d 'alias Stage and add changes to previous commit'
 	stage
 	amend
 end
 
-function save -d 'Create a save point'
+function save -d 'alias Create a save point'
 	stage
 	commit -m ":WIP: save point"
 end
 
-function merge -d 'Merge branch to current'
+function merge -d 'alias Merge branch to current'
 	command git merge $argv
 end
 
-function clean -d 'Reset working directory to previous commit'
+function clean -d 'alias Reset working directory to previous commit'
 	command git clean -fdx
 end
 
-function untracked -d 'List untracked files'
+function untracked -d 'alias List untracked files'
 	command git clean --dry-run -dx
 end
 
-function upstream -d 'Stage, commit and push'
+function upstream -d 'alias Stage, commit and push'
 	commit-all
 	done
 end
 
-function unassume -d 'Touch these changes'
+function unassume -d 'alias Touch these changes'
 	command git update-index --no-assume-unchanged $argv
 end
 
-function assume -d 'Dont touch these changes'
+function assume -d 'alias Dont touch these changes'
 	argparse n/unassume -- $argv
 	or return
 
@@ -175,32 +175,32 @@ function assume -d 'Dont touch these changes'
 end
 
 ## Fetching
-function clone -d 'Clone repo'
+function clone -d 'alias Clone repo'
 	command git clone $argv
 end
 
-function fetch -d 'Fetch remote changes'
+function fetch -d 'alias Fetch remote changes'
 	command git fetch $argv
 end
 
-function pull -d 'Pull changes from remote'
+function pull -d 'alias Pull changes from remote'
 	command git pull origin (current) $argv
 end
 
-function push -d 'Push changes to remote'
+function push -d 'alias Push changes to remote'
 	command git push origin (current) $argv
 end
 
-function done -d 'Pull and push'
+function done -d 'alias Pull and push'
 	pull
 	push
 end
 
 # Xclip commands
-function copy -d 'Pipe output to clipboard'
+function copy -d 'alias Pipe output to clipboard'
 	command xclip -selection clipboard
 end
 
-function paste -d 'Paste content from clipboard'
+function paste -d 'alias Paste content from clipboard'
 	command xclip -selection clipboard -o
 end
