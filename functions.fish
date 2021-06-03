@@ -147,11 +147,11 @@ function merge -d 'alias Merge branch to current'
 end
 
 function clean -d 'alias Reset working directory to previous commit'
-	command git clean -fdx
+	command git clean -fdX
 end
 
 function untracked -d 'alias List untracked files'
-	command git clean --dry-run -dx
+	command git clean --dry-run -dX
 end
 
 function upstream -d 'alias Stage, commit and push'
