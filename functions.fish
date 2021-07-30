@@ -34,9 +34,10 @@ function branch -d 'alias List or Switch to branch'
 	set total (math $local + $remote)
 
 	if test $total -gt 0
-		command git checkout $name
+		command git switch $name
 	else
-		command git checkout -b $name
+		command git branch $name
+		command git switch $name
 	end
 end
 
@@ -69,6 +70,30 @@ end
 
 function master -d 'alias Checkout to master'
 	branch master
+end
+
+function sandbox -d 'alias Checkout to sandbox'
+	branch sandbox
+end
+
+function Sandbox -d 'alias Checkout to Sandbox'
+	branch Sandbox
+end
+
+function development -d 'alias Checkout to development'
+	branch development
+end
+
+function Development -d 'alias Checkout to Development'
+	branch Development
+end
+
+function production -d 'alias Checkout to production'
+	branch production
+end
+
+function Production -d 'alias Checkout to Production'
+	branch Production
 end
 
 # Viewing current directories changes
