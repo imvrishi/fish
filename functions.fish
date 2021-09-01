@@ -1,6 +1,5 @@
 # Git commands
 
-## Branching
 function current -d "alias Get current branch name"
 	command git branch --show-current
 end
