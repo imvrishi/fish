@@ -1,9 +1,5 @@
 # Git commands
 
-function current -d "alias Get current branch name"
-	command git branch --show-current
-end
-
 function logs -d 'alias Nice looking log'
 	command git log -80 --color --graph --pretty=format:"%C(red)%h%C(reset)%C(yellow)%d%Creset %s %C(green italic)(%cr)%C(reset) %C(blue)%an%C(reset) %C(white dim)%GK %C(reset)" --abbrev-commit | less -R
 end
